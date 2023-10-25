@@ -1,4 +1,5 @@
 const Card = require("../models/card");
+const CardInstance = require("../models/cardinstance");
 const fetch = require("node-fetch");
 
 const asyncHandler = require("express-async-handler");
@@ -10,11 +11,13 @@ exports.card_list = asyncHandler(async (req, res, next) => {
 });
 
 exports.card_detail = asyncHandler(async (req, res, next) => {
-  const [card, cardInstances, cardJson] = await Promise.all([
+  const [card, cardInstances] = await Promise.all([
     Card.findById(req.params.id).exec(),
-    //CardInstance.find({ card: req.params.id }).exec(),
+    CardInstance.find({ card: req.params.id }).exec(),
   ]);
-  console.log(`https://api.scryfall.com/cards/${card.sfId}`);
+
+  console.log(req.params.id);
+
   const response = await fetch(`https://api.scryfall.com/cards/${card.sfId}`, {
     mode: "cors",
   });
@@ -25,11 +28,35 @@ exports.card_detail = asyncHandler(async (req, res, next) => {
     err.status = 404;
     return next(err);
   }
-  console.log(json.image_uris.normal);
+  //console.log(json);
   res.render("card_detail", {
     name: card.name,
     card: card,
-    //card_instances: cardInstances,
-    source: json.image_uris.normal,
+    card_instances: cardInstances,
+    json: json,
   });
+});
+
+exports.card_create_get = asyncHandler(async (req, res, next) => {
+  res.send("NOT IMPLEMENTED: card create GET");
+});
+
+exports.card_create_post = asyncHandler(async (req, res, next) => {
+  res.send("NOT IMPLEMENTED: card create POST");
+});
+
+exports.card_delete_get = asyncHandler(async (req, res, next) => {
+  res.send("NOT IMPLEMENTED: card delete GET");
+});
+
+exports.card_delete_post = asyncHandler(async (req, res, next) => {
+  res.send("NOT IMPLEMENTED: card delete POST");
+});
+
+exports.card_update_get = asyncHandler(async (req, res, next) => {
+  res.send("NOT IMPLEMENTED: card update GET");
+});
+
+exports.card_update_post = asyncHandler(async (req, res, next) => {
+  res.send("NOT IMPLEMENTED: card update POST");
 });

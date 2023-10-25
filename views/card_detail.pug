@@ -1,6 +1,18 @@
 extends layout
 
 block content
-  h1 Title: #{card.name}
+  h1 #{card.name}
 
-  img(src=source)
+  img(class='image' src=json.image_uris.normal)
+
+  div
+    |Quantity: #{card_instances.length}
+  ol
+    |Decks
+    each cardinstance in card_instances
+        li 
+            a(href=cardinstance.url) 
+                if cardinstance.deck != null
+                    |#{cardinstance.deck}
+                else 
+                    |Not in a deck.

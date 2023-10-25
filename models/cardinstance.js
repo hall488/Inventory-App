@@ -10,7 +10,7 @@ const CardInstanceSchema = new Schema({
 // Virtual for bookinstance's URL
 CardInstanceSchema.virtual("url").get(function () {
   // We don't use an arrow function as we'll need the this object
-  return `/catalog/cardinstance/${this._id}`;
+  return `/cardinstance/${this._id}`;
 });
 
 // Export model
