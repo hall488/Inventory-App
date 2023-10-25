@@ -3,5 +3,26 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src="https://code.jquery.com/jquery-3.7.1.min.js")
+    script(src="https://kit.fontawesome.com/eedd958231.js" crossorigin="anonymous")
+    script(defer src='/javascripts/test.js')
   body
-    block content
+    div(class='header')
+      div(class='logo')
+        |MTG Decks
+      nav
+        a(id='cardsLink' href='/Cards')
+          |Cards
+        a(id='decksLink' href='/Decks')
+          |Decks
+        a(id='createCardLink' href='/CreateCard')
+          |Create Card
+        a(id='createDeckLink' href='/CreateDeck')
+          |Create Deck
+
+    div(class='content')
+      block content
+    div(class='footer')
+      |Christopher Hall
+      i.fa-brands.fa-github(aria-hidden='true')
+    
