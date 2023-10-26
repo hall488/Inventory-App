@@ -4,9 +4,11 @@ block content
   h1= title
 
   ul
-    each card in card_list
-      li
-        a(href=card.url) #{card.name}
-
+    if card_list.length != 0
+        - var i = 0
+        while i < card_list.length
+            li
+                a(href=card_list[i].url) #{card_list[i].name} x#{instance_counts[i]}
+            - ++ i
     else
       li There are no cards.

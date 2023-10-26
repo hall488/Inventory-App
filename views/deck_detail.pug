@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1 #{name}
+  div
+    |Quantity: #{card_instances.length}
+  ol
+    |Cards
+    each cardinstance in card_instances
+        li 
+            a(href=cardinstance.url) 
+                |#{cardinstance.card.name}

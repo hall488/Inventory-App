@@ -8,11 +8,14 @@ block content
   div
     |Quantity: #{card_instances.length}
   ol
-    |Decks
+    |Instances
     each cardinstance in card_instances
         li 
-            a(href=cardinstance.url) 
-                if cardinstance.deck != null
-                    |#{cardinstance.deck}
-                else 
-                    |Not in a deck.
+            if cardinstance.deck != null
+                a(href=cardinstance.deck.url) 
+                    |#{cardinstance.deck.name}
+            else 
+                a(href=cardinstance.url)
+                    |Not in a deck
+            
+                

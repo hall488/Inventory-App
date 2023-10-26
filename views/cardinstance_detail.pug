@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1 #{cardinstance.card.name}
+
+  img(class='image' src=json.image_uris.normal)
+
+  div
+    if cardinstance.deck != null
+        a(href=cardinstance.deck.url)
+            |#{cardinstance.deck.name}
+    else 
+        |Not in a deck.

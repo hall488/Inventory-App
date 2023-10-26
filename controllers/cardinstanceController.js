@@ -13,7 +13,29 @@ exports.cardinstance_list = asyncHandler(async (req, res, next) => {
 
 // Display detail page for a specific CardInstance.
 exports.cardinstance_detail = asyncHandler(async (req, res, next) => {
-  res.send(`NOT IMPLEMENTED: CardInstance detail: ${req.params.id}`);
+  const cardinstance = await CardInstance.findById(req.params.id)
+    .populate("card")
+    .populate("deck")
+    .exec();
+
+  const response = await fetch(
+    `https://api.scryfall.com/cards/${cardinstance.card.sfId}`,
+    {
+      mode: "cors",
+    }
+  );
+  const json = await response.json();
+
+  if (cardinstance === null) {
+    const err = new Error("Card copy not found.");
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render("cardinstance_detail", {
+    cardinstance: cardinstance,
+    json: json,
+  });
 });
 
 // Display CardInstance create form on GET.

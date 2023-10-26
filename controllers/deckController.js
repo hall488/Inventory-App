@@ -1,46 +1,37 @@
-const Card = require("../models/card");
 const CardInstance = require("../models/cardinstance");
+const Deck = require("../models/deck.js");
 const fetch = require("node-fetch");
 
 const asyncHandler = require("express-async-handler");
 
-exports.card_list = asyncHandler(async (req, res, next) => {
-  const allCards = await Card.find({}, "name").exec();
-  const allCardCounts = await Promise.all(
-    allCards.map((card) => {
-      return CardInstance.countDocuments({ card: card.id }).exec();
-    })
-  );
+exports.deck_list = asyncHandler(async (req, res, next) => {
+  const allDecks = await Deck.find({}, "name").exec();
 
-  res.render("card_list", {
-    title: "Card List",
-    card_list: allCards,
-    instance_counts: allCardCounts,
-  });
+  res.render("deck_list", { title: "Deck List", deck_list: allDecks });
 });
 
-exports.card_detail = asyncHandler(async (req, res, next) => {
-  const [card, cardInstances] = await Promise.all([
-    Card.findById(req.params.id).exec(),
-    CardInstance.find({ card: req.params.id }).populate("deck").exec(),
-  ]);
+exports.deck_detail = asyncHandler(async (req, res, next) => {
+  const deck = await Deck.findById(req.params.id)
+    .populate({
+      path: "cardinstances",
+      populate: {
+        path: "card",
+        model: "Card",
+      },
+    })
+    .exec();
 
-  const response = await fetch(`https://api.scryfall.com/cards/${card.sfId}`, {
-    mode: "cors",
-  });
-  const json = await response.json();
-
-  if (card === null) {
+  if (deck === null) {
     const err = new Error("Card not found");
     err.status = 404;
     return next(err);
   }
-  //console.log(json);
-  res.render("card_detail", {
-    name: card.name,
-    card: card,
-    card_instances: cardInstances,
-    json: json,
+
+  console.log(deck.cardinstances);
+
+  res.render("deck_detail", {
+    name: deck.name,
+    card_instances: deck.cardinstances,
   });
 });
 
