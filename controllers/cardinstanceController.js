@@ -70,6 +70,11 @@ exports.cardinstance_delete_post = asyncHandler(async (req, res, next) => {
 });
 
 exports.cardinstance_add_deck_post = asyncHandler(async (req, res, next) => {
+  if (req.body.deck_id == "none") {
+    res.redirect("back");
+    return;
+  }
+
   let [deck, cardinstance] = await Promise.all([
     Deck.findById(req.body.deck_id)
       .populate({
