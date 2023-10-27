@@ -6,20 +6,34 @@ html
     script(src="https://code.jquery.com/jquery-3.7.1.min.js")
     script(src="https://kit.fontawesome.com/eedd958231.js" crossorigin="anonymous")
     script(defer src='/javascripts/test.js')
+    script(defer src='/javascripts/dropdown.js')
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
   body
     div(class='header')
       div(class='logo')
         |MTG Collection
-      nav
-        a(id='cardsLink' href='/Cards')
-          |Cards
-        a(id='decksLink' href='/Decks')
-          |Decks
-        a(id='createCardLink' href='/Search')
-          |Create Card
-        a(id='createDeckLink' href='/CreateDeck')
-          |Create Deck
+      div(class="drop-down right")
+        ul(class="menu override")
+          li
+            a(href='/Cards')
+              div
+                |Cards
+              i.fa-solid.fa-file
+          li 
+            a(href='/Decks')
+              div 
+                |Decks
+              i.fa-solid.fa-layer-group
+          li
+            a(href='/Search')
+              div 
+                |Create Cards
+              i.fa-solid.fa-square-plus
+          li
+            a(href='/CreateDeck')
+              div 
+                |Create Deck
+              i.fa-solid.fa-folder-plus
 
     div(class='content')
       block content
