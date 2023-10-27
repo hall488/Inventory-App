@@ -1,5 +1,7 @@
+const Card = require("../models/card");
 const CardInstance = require("../models/cardinstance");
 const asyncHandler = require("express-async-handler");
+const Deck = require("../models/deck");
 
 // Display list of all CardInstances.
 exports.cardinstance_list = asyncHandler(async (req, res, next) => {
@@ -13,10 +15,13 @@ exports.cardinstance_list = asyncHandler(async (req, res, next) => {
 
 // Display detail page for a specific CardInstance.
 exports.cardinstance_detail = asyncHandler(async (req, res, next) => {
-  const cardinstance = await CardInstance.findById(req.params.id)
-    .populate("card")
-    .populate("deck")
-    .exec();
+  const [cardinstance, allDecks] = await Promise.all([
+    CardInstance.findById(req.params.id)
+      .populate("card")
+      .populate("deck")
+      .exec(),
+    Deck.find({}, "name id").exec(),
+  ]);
 
   const response = await fetch(
     `https://api.scryfall.com/cards/${cardinstance.card.sfId}`,
@@ -35,35 +40,53 @@ exports.cardinstance_detail = asyncHandler(async (req, res, next) => {
   res.render("cardinstance_detail", {
     cardinstance: cardinstance,
     json: json,
+    decks: allDecks,
   });
-});
-
-// Display CardInstance create form on GET.
-exports.cardinstance_create_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: CardInstance create GET");
-});
-
-// Handle CardInstance create on POST.
-exports.cardinstance_create_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: CardInstance create POST");
-});
-
-// Display CardInstance delete form on GET.
-exports.cardinstance_delete_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: CardInstance delete GET");
 });
 
 // Handle CardInstance delete on POST.
 exports.cardinstance_delete_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: CardInstance delete POST");
+  let cardinstance = await CardInstance.findById(req.body.id)
+    .populate({
+      path: "deck",
+      populate: {
+        path: "cardinstances",
+        populate: {
+          path: "card",
+          model: "Card",
+        },
+      },
+    })
+    .exec();
+
+  if (cardinstance.deck != undefined) {
+    cardinstance.deck.cardinstances.pull(cardinstance);
+    cardinstance.deck.save();
+  }
+
+  cardinstance.deleteOne();
+  res.redirect("back");
 });
 
-// Display CardInstance update form on GET.
-exports.cardinstance_update_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: CardInstance update GET");
-});
+exports.cardinstance_add_deck_post = asyncHandler(async (req, res, next) => {
+  let [deck, cardinstance] = await Promise.all([
+    Deck.findById(req.body.deck_id)
+      .populate({
+        path: "cardinstances",
+        populate: {
+          path: "card",
+          model: "Card",
+        },
+      })
+      .exec(),
+    CardInstance.findById(req.body.cardinstance_id).exec(),
+  ]);
 
-// Handle cardinstance update on POST.
-exports.cardinstance_update_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: CardInstance update POST");
+  deck.cardinstances.push(cardinstance);
+  deck.save();
+
+  cardinstance.deck = deck;
+  cardinstance.save();
+
+  res.redirect("back");
 });

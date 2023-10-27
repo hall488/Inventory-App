@@ -4,9 +4,13 @@ block content
   h1 #{name}
   div
     |Quantity: #{card_instances.length}
-  ol
+  ul(class='deck-detail-list')
     |Cards
     each cardinstance in card_instances
         li 
             a(href=cardinstance.url) 
-                |#{cardinstance.card.name}
+              |#{cardinstance.card.name}
+            form(method='POST' action='')
+              input(type="hidden" name='id' value=cardinstance.id)
+              button
+                i.fa-solid.fa-delete-left

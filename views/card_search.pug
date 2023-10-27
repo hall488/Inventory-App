@@ -1,0 +1,12 @@
+extends layout 
+
+block content 
+    h1 #{title}
+
+    div(class='searchbar')
+        input(placeholder='Search card' id='search')
+        i.fa-solid.fa-magnifying-glass(aria-hidden='true')
+    
+    div(class='searched-cards')
+    script(src="/javascripts/search.js")
+    

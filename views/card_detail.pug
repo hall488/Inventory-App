@@ -5,17 +5,21 @@ block content
 
   img(class='image' src=json.image_uris.normal)
 
-  div
+  div(class='quantity')
     |Quantity: #{card_instances.length}
-  ol
+  ol(class='card-detail-ol')
     |Instances
     each cardinstance in card_instances
         li 
-            if cardinstance.deck != null
-                a(href=cardinstance.deck.url) 
-                    |#{cardinstance.deck.name}
-            else 
-                a(href=cardinstance.url)
-                    |Not in a deck
+          if cardinstance.deck != null
+              a(href=cardinstance.deck.url) 
+                  |#{cardinstance.deck.name}
+          else 
+              a(href=cardinstance.url)
+                  |Not in a deck
+          form(method='POST' action='')
+            input(type="hidden" name='id' value=cardinstance.id)
+            button 
+              i.fa-solid.fa-delete-left
             
                 

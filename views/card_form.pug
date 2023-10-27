@@ -1,0 +1,17 @@
+extends layout 
+
+block content 
+    h1 #{title}
+
+    img(class='created-card' src=json.image_uris.normal)
+    form(class='created-card-form' method='POST' action='')
+        input(type='hidden' name='name' value=json.name)
+        label(for='quantity')
+        input(type='number' name='quantity' placeholder='Enter Quantity')
+        label(for='deck') Select Deck
+        select(name='deck')
+            option(value='none') None
+            each deck in decks
+                option(value=deck.id) #{deck.name}
+        button(type='submit') Create Card
+    

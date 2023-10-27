@@ -3,10 +3,13 @@ extends layout
 block content
   h1= title
 
-  ul
+  ul(class='deck-list')
     each deck in deck_list
       li
         a(href=deck.url) #{deck.name}
-
+        form(method='POST' action='')
+            input(type="hidden" name='id' value=deck.id)
+            button 
+              i.fa-solid.fa-delete-left
     else
       li There are no decks.

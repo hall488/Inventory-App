@@ -3,7 +3,7 @@ extends layout
 block content
   h1= title
 
-  ul
+  ul(class='card_list')
     if card_list.length != 0
         - var i = 0
         while i < card_list.length

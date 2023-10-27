@@ -5,9 +5,17 @@ block content
 
   img(class='image' src=json.image_uris.normal)
 
-  div
+  div(class='card-instance-div')
     if cardinstance.deck != null
         a(href=cardinstance.deck.url)
             |#{cardinstance.deck.name}
     else 
-        |Not in a deck.
+      |Not in a deck.
+      form(class='card-instance-form' method="POST" action="")
+        input(type="hidden" name="cardinstance_id" value=cardinstance.id)
+        label(for="deck_id") Select Deck
+        select(name='deck_id')
+          option(value="none") None
+          each deck in decks 
+            option(value=deck.id) #{deck.name}
+        button Add to deck
