@@ -272,6 +272,7 @@ nav>a:hover {
   grid-template-columns: repeat(auto-fill, minmax(200px, .5fr));
   gap: 16px;
   width: 100%;
+  justify-content: center;
 }
 
 .searched-cards>a>img {
