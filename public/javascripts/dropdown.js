@@ -72,7 +72,7 @@ const dropDowns = () => {
     if (d.classList.contains("left")) {
       leftOffset -= -(menu.clientWidth + 16) / 2;
     } else if (d.classList.contains("right")) {
-      leftOffset += -(menu.clientWidth + 16) / 2;
+      leftOffset += -(menu.clientWidth + 32) / 2;
     }
     menu.style.left = `${leftOffset}px`;
 
