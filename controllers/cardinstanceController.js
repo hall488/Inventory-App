@@ -1,6 +1,7 @@
 const Card = require("../models/card");
 const CardInstance = require("../models/cardinstance");
 const asyncHandler = require("express-async-handler");
+const fetch = require("node-fetch");
 const Deck = require("../models/deck");
 
 // Display list of all CardInstances.
